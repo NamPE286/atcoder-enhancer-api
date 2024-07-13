@@ -20,6 +20,22 @@ async function fetchDropboxFile(path: string) {
     return await res.text()
 }
 
+async function fetchProblemTags(problemID: string) {
+    const res = await fetch(`https://atcoder-tags.herokuapp.com/check/${problemID}`)
+    const htmlText = await res.text()
+    let arrayText: string = ''
+
+    for (let i = htmlText.indexOf("var labels = ") + 13; i < htmlText.indexOf("var labels = ") + 1000; i++) {
+        arrayText += htmlText[i]
+
+        if (htmlText[i] == ']') {
+            break
+        }
+    }
+
+    return JSON.parse(arrayText)
+}
+
 router.route('/:contest/:problem/testcase/:testcase')
     .get(async (req, res) => {
         const { contest, problem, testcase } = req.params
@@ -32,6 +48,14 @@ router.route('/:contest/:problem/testcase/:testcase')
         } catch {
             res.status(404).send()
         }
+    })
+
+router.route('/:contest/:problem/tags')
+    .get(async (req, res) => {
+        const { contest, problem } = req.params
+        const problemID = contest.toLowerCase() + '_' + problem.toLowerCase()
+
+        res.send(await fetchProblemTags(problemID))
     })
 
 export default router
