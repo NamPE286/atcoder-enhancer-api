@@ -20,7 +20,7 @@ async function fetchDropboxFile(path: string) {
     return await res.text()
 }
 
-router.route('/:contest/:problem/:testcase')
+router.route('/:contest/:problem/testcase/:testcase')
     .get(async (req, res) => {
         const { contest, problem, testcase } = req.params
 
