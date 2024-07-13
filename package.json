@@ -4,6 +4,7 @@
   "type": "module",
   "version": "1.0.0",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.8",
     "@types/bun": "latest"
   },
   "peerDependencies": {
