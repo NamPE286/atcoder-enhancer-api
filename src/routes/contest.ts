@@ -13,6 +13,10 @@ async function fetchDropboxFile(path: string) {
         }
     })
 
+    if (!res.ok) {
+        throw new Error("File not found")
+    }
+
     return await res.text()
 }
 
@@ -20,10 +24,14 @@ router.route('/:contest/:problem/:testcase')
     .get(async (req, res) => {
         const { contest, problem, testcase } = req.params
 
-        const input = await fetchDropboxFile(`/${contest}/${problem}/in/${testcase}`)
-        const output = await fetchDropboxFile(`/${contest}/${problem}/out/${testcase}`)
+        try {
+            const input = await fetchDropboxFile(`/${contest}/${problem}/in/${testcase}`)
+            const output = await fetchDropboxFile(`/${contest}/${problem}/out/${testcase}`)
 
-        res.send({ in: input, out: output })
+            res.send({ in: input, out: output })
+        } catch {
+            res.status(404).send()
+        }
     })
 
 export default router
