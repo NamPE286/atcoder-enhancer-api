@@ -1,4 +1,4 @@
-# .
+# AtCoder Enhancer API
 
 To install dependencies:
 
