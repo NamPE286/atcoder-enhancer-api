@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/contest', require(`./routes/contest`).default)
+app.use('/problem', require(`./routes/problem`).default)
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`)
