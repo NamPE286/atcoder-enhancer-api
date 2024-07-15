@@ -15,6 +15,34 @@ async function fetchDropboxFile(path: string) {
     return fileContent
 }
 
+router.route('/:contest')
+    .get(async (req, res) => {
+        const { contest } = req.params
+        const clipDifficulty = (difficulty: number): number =>
+            Math.round(
+                difficulty >= 400 ? difficulty : 400 / Math.exp(1.0 - difficulty / 400)
+            );
+
+        fetch('https://kenkoooo.com/atcoder/resources/problem-models.json')
+            .then((response) => response.json())
+            .then((response) => {
+                res.setHeader('Cache-Control', 'max-age: 3600')
+                const ans = []
+
+                for (let i = 97; i <= 122; i++) {
+                    const problemID = contest.toLowerCase() + '_' + String.fromCharCode(i)
+
+                    if (!response[problemID]) {
+                        break
+                    }
+
+                    ans.push({ difficulty: clipDifficulty(response[problemID].difficulty) })
+                }
+
+                res.send(ans)
+            }).catch((err) => res.status(500).send())
+    })
+
 router.route('/:contest/:problem/testcase/:testcase')
     .get(async (req, res) => {
         const { contest, problem, testcase } = req.params
