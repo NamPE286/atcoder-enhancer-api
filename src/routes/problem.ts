@@ -20,11 +20,22 @@ router.route('/:id')
                     return
                 }
 
+                let prob: any;
+                const clipDifficulty = (difficulty: number): number =>
+                    Math.round(
+                        difficulty >= 400 ? difficulty : 400 / Math.exp(1.0 - difficulty / 400)
+                    );
+
                 if (response[id.toLowerCase()]) {
-                    res.send(response[id.toLowerCase()])
+                    prob = response[id.toLowerCase()]
+
                 } else {
-                    res.send(response[id.toUpperCase()])
+                    prob = response[id.toUpperCase()]
                 }
+
+                res.send({
+                    difficulty: clipDifficulty(prob.difficulty)
+                })
             }).catch((err) => res.status(500).send())
     })
 
