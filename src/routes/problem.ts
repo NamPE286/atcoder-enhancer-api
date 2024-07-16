@@ -1,11 +1,7 @@
 import express from 'express'
-import NodeFetchCache, { MemoryCache } from 'node-fetch-cache';
+import { fetch } from '../utils/fetch'
 
 const router = express.Router()
-const fetch = NodeFetchCache.create({
-    cache: new MemoryCache({ ttl: 3600000 }),
-    shouldCacheResponse: (response) => response.ok
-});
 
 router.route('/:id')
     .get(async (req, res) => {
